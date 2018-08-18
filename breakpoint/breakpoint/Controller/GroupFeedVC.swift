@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import MessageUI
 
 class GroupFeedVC: UIViewController {
 
@@ -17,6 +18,7 @@ class GroupFeedVC: UIViewController {
     @IBOutlet weak var sendBtnView: UIView!
     @IBOutlet weak var messageTextField: InsetTextField!
     @IBOutlet weak var sendBtn: UIButton!
+    @IBOutlet weak var sentEmailButton: UIButton!
     
     var group: Group?
     var groupMessages = [Message]()
@@ -27,9 +29,7 @@ class GroupFeedVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sendBtnView.bindToKeyboard()
-        tableView.delegate = self
-        tableView.dataSource = self
+        configureViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,6 +51,13 @@ class GroupFeedVC: UIViewController {
         }
     }
     
+    func configureViews() {
+        sendBtnView.bindToKeyboard()
+        tableView.delegate = self
+        tableView.dataSource = self
+        sentEmailButton.isHidden = MFMailComposeViewController.canSendMail() ? false : true
+    }
+    
     @IBAction func sendBtnWasPressed(_ sender: Any) {
         if messageTextField.text != "" {
             messageTextField.isEnabled = false
@@ -67,6 +74,19 @@ class GroupFeedVC: UIViewController {
     
     @IBAction func backBtnWasPressed(_ sender: Any) {
         dismissDetail()
+    }
+    
+    @IBAction func didPressSentEmailButton(_ sender: Any) {
+        showEmailPopUp()
+    }
+    
+    //MARK:- Helper Methods
+    func showEmailPopUp() {
+        let composeVC = MFMailComposeViewController()
+        composeVC.mailComposeDelegate = self
+        let recipients = group?.members.filter { $0 != Auth.auth().currentUser?.email }
+        composeVC.setToRecipients(recipients)
+        present(composeVC, animated: true, completion: nil)
     }
 }
 
@@ -89,6 +109,15 @@ extension GroupFeedVC: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 }
+
+extension GroupFeedVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult,
+                               error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
 
 
 

@@ -8,11 +8,13 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
 
-class AuthVC: UIViewController {
+class AuthVC: UIViewController, GIDSignInUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        GIDSignIn.sharedInstance().uiDelegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -27,9 +29,26 @@ class AuthVC: UIViewController {
         present(loginVC!, animated: true, completion: nil)
     }
     
-    @IBAction func facebookSignInBtnWasPressed(_ sender: Any) {
+    @IBAction func googleSignInBtnWasPressed(_ sender: Any) {
+        GIDSignIn.sharedInstance().signIn()
     }
     
-    @IBAction func googleSignInBtnWasPressed(_ sender: Any) {
+    //MARK:- GIDSignInUIDelegate
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print(error)
+            return
+        }
+        
+        guard let authentication = user.authentication else { return }
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                                                       accessToken: authentication.accessToken)
+        print(credential)
+        Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+        }
     }
 }
