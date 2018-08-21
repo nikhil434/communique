@@ -30,6 +30,7 @@ class AuthVC: UIViewController, GIDSignInUIDelegate {
     }
     
     @IBAction func googleSignInBtnWasPressed(_ sender: Any) {
+        Utility.showLoadingIndicator()
         GIDSignIn.sharedInstance().signIn()
     }
     

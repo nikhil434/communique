@@ -20,9 +20,11 @@ class LoginVC: UIViewController {
     }
     
     @IBAction func signInBtnWasPressed(_ sender: Any) {
+        Utility.showLoadingIndicator()
         if emailField.text != nil && passwordField.text != nil {
             AuthService.instance.loginUser(withEmail: emailField.text!, andPassword: passwordField.text!, loginComplete: { (success, loginError) in
                 if success {
+                    Utility.hideLoadingIndicator()
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     print(String(describing: loginError?.localizedDescription))
@@ -31,10 +33,12 @@ class LoginVC: UIViewController {
                 AuthService.instance.registerUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, userCreationComplete: { (success, registrationError) in
                     if success {
                         AuthService.instance.loginUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, loginComplete: { (success, nil) in
+                            Utility.hideLoadingIndicator()
                             self.dismiss(animated: true, completion: nil)
                             print("Successfully registered user")
                         })
                     } else {
+                        Utility.hideLoadingIndicator()
                         print(String(describing: registrationError?.localizedDescription))
                     }
                 })

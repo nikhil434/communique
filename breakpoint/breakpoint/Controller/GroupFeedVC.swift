@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import MessageUI
+import FirebaseStorage
 
 class GroupFeedVC: UIViewController {
 
@@ -18,10 +19,16 @@ class GroupFeedVC: UIViewController {
     @IBOutlet weak var sendBtnView: UIView!
     @IBOutlet weak var messageTextField: InsetTextField!
     @IBOutlet weak var sendBtn: UIButton!
+    @IBOutlet weak var attachmentBtn: UIButton!
     @IBOutlet weak var sentEmailButton: UIButton!
+    @IBOutlet weak var attachmentViewerView: UIView!
+    @IBOutlet weak var attachmentImageView: UIImageView!
+    @IBOutlet weak var attachmentCloseButton: UIButton!
     
     var group: Group?
     var groupMessages = [Message]()
+    
+    private let storage = Storage.storage().reference()
     
     func initData(forGroup group: Group) {
         self.group = group
@@ -62,15 +69,25 @@ class GroupFeedVC: UIViewController {
         if messageTextField.text != "" {
             messageTextField.isEnabled = false
             sendBtn.isEnabled = false
-            DataService.instance.uploadPost(withMessage: messageTextField.text!, forUID: Auth.auth().currentUser!.uid, withGroupKey: group?.key, sendComplete: { (complete) in
+            attachmentBtn.isEnabled = false
+            DataService.instance.uploadPost(withMessage: messageTextField.text!, isMedia: false, forUID: Auth.auth().currentUser!.uid, withGroupKey: group?.key, sendComplete: { (complete) in
                 if complete {
                     self.messageTextField.text = ""
                     self.messageTextField.isEnabled = true
                     self.sendBtn.isEnabled = true
+                    self.attachmentBtn.isEnabled = true
                 }
             })
         }
     }
+    
+    @IBAction func didPressAttachmentButton(_ sender: Any) {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
     
     @IBAction func backBtnWasPressed(_ sender: Any) {
         dismissDetail()
@@ -80,6 +97,9 @@ class GroupFeedVC: UIViewController {
         showEmailPopUp()
     }
     
+    @IBAction func didPressAttachmentCloseButton(_ sender: Any) {
+        attachmentViewerView.isHidden = true
+    }
     //MARK:- Helper Methods
     func showEmailPopUp() {
         let composeVC = MFMailComposeViewController()
@@ -87,6 +107,57 @@ class GroupFeedVC: UIViewController {
         let recipients = group?.members.filter { $0 != Auth.auth().currentUser?.email }
         composeVC.setToRecipients(recipients)
         present(composeVC, animated: true, completion: nil)
+    }
+    
+    private func sendPhoto(_ image: UIImage) {
+        sendBtn.isEnabled = false
+        attachmentBtn.isEnabled = false
+        uploadImage(image, toGroup: group!.key) { [weak self] url in
+            guard let `self` = self else {
+                return
+            }
+            guard let url = url else {
+                return
+            }
+            DataService.instance.uploadPost(withMessage: url.absoluteString, isMedia: true, forUID: Auth.auth().currentUser!.uid, withGroupKey: self.group?.key, sendComplete: { (complete) in
+                if complete {
+                    self.sendBtn.isEnabled = true
+                    self.attachmentBtn.isEnabled = true
+                }
+            })
+            
+        }
+    }
+    
+    private func uploadImage(_ image: UIImage, toGroup groupKey: String, completion: @escaping (URL?) -> Void) {
+    
+        guard let data = UIImageJPEGRepresentation(image, 0.4) else {
+            completion(nil)
+            return
+        }
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        let imageName = [UUID().uuidString, String(Date().timeIntervalSince1970)].joined()
+        storage.child(groupKey).child(imageName).putData(data, metadata: metadata) { meta, error in
+            completion(meta?.downloadURL())
+        }
+    }
+    
+    private func downloadImage(at url: URL, completion: @escaping (UIImage?) -> Void) {
+        Utility.showLoadingIndicator()
+        let ref = Storage.storage().reference(forURL: url.absoluteString)
+        let megaByte = Int64(1 * 1024 * 1024)
+        ref.getData(maxSize: megaByte) { data, error in
+            Utility.hideLoadingIndicator()
+            guard let imageData = data else {
+                completion(nil)
+                return
+            }
+            
+            completion(UIImage(data: imageData))
+        }
     }
 }
 
@@ -104,9 +175,19 @@ extension GroupFeedVC: UITableViewDelegate, UITableViewDataSource {
         let message = groupMessages[indexPath.row]
         
         DataService.instance.getUsername(forUID: message.senderId) { (email) in
-            cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: email, content: message.content)
+            cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: email, content: message.content, isMedia: message.isMedia)
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let message = groupMessages[indexPath.row]
+        if message.isMedia {
+            downloadImage(at: URL(string: message.content)!) { (image) in
+                self.attachmentViewerView.isHidden = false
+                self.attachmentImageView.image = image
+            }
+        }
     }
 }
 
@@ -118,6 +199,26 @@ extension GroupFeedVC: MFMailComposeViewControllerDelegate {
     }
 }
 
+extension GroupFeedVC: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var newImage: UIImage
+        
+        if let possibleImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+            newImage = possibleImage
+        } else {
+            return
+        }
+        print(newImage.size)
+        sendPhoto(newImage)
+        dismiss(animated: true)
+    }
+}
 
 
 

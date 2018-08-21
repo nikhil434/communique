@@ -13,10 +13,13 @@ class GroupFeedCell: UITableViewCell {
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var emailLbl: UILabel!
     @IBOutlet weak var contentLbl: UILabel!
-    
-    func configureCell(profileImage: UIImage, email: String, content: String) {
+    @IBOutlet weak var attachmentImage: UIImageView!
+    @IBOutlet weak var attachMentImageWidth: NSLayoutConstraint!
+    func configureCell(profileImage: UIImage, email: String, content: String, isMedia: Bool) {
         self.profileImage.image = profileImage
         self.emailLbl.text = email
-        self.contentLbl.text = content
+        self.contentLbl.text = isMedia ? "Attachment" : content
+        self.attachmentImage.isHidden = isMedia ? false: true
+        self.attachMentImageWidth.constant = isMedia ? 25 : 0
     }
 }

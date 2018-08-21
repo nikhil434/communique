@@ -50,12 +50,12 @@ class DataService {
         }
     }
     
-    func uploadPost(withMessage message: String, forUID uid: String, withGroupKey groupKey: String?, sendComplete: @escaping (_ status: Bool) -> ()) {
+    func uploadPost(withMessage message: String, isMedia flag: Bool, forUID uid: String, withGroupKey groupKey: String?, sendComplete: @escaping (_ status: Bool) -> ()) {
         if groupKey != nil {
-            REF_GROUPS.child(groupKey!).child("messages").childByAutoId().updateChildValues(["content": message, "senderId": uid])
+            REF_GROUPS.child(groupKey!).child("messages").childByAutoId().updateChildValues(["content": message, "senderId": uid, "isMedia": flag])
             sendComplete(true)
         } else {
-            REF_FEED.childByAutoId().updateChildValues(["content": message, "senderId": uid])
+            REF_FEED.childByAutoId().updateChildValues(["content": message, "senderId": uid, "isMedia": flag])
             sendComplete(true)
         }
     }
@@ -68,7 +68,8 @@ class DataService {
             for message in feedMessageSnapshot {
                 let content = message.childSnapshot(forPath: "content").value as! String
                 let senderId = message.childSnapshot(forPath: "senderId").value as! String
-                let message = Message(content: content, senderId: senderId)
+                let isMedia = (message.childSnapshot(forPath: "isMedia").value as? Bool) ?? false
+                let message = Message(content: content, senderId: senderId, isMedia: isMedia )
                 messageArray.append(message)
             }
             
@@ -83,7 +84,8 @@ class DataService {
             for groupMessage in groupMessageSnapshot {
                 let content = groupMessage.childSnapshot(forPath: "content").value as! String
                 let senderId = groupMessage.childSnapshot(forPath: "senderId").value as! String
-                let groupMessage = Message(content: content, senderId: senderId)
+                let isMedia = (groupMessage.childSnapshot(forPath: "isMedia").value as? Bool) ?? false
+                let groupMessage = Message(content: content, senderId: senderId, isMedia: isMedia )
                 groupMessageArray.append(groupMessage)
             }
             handler(groupMessageArray)

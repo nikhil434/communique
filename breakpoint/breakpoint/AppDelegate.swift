@@ -63,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     //MARK:- GIDSignInDelegate methods
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
         if let error = error {
+            Utility.hideLoadingIndicator()
             print(error)
             return
         }
@@ -72,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                                                        accessToken: authentication.accessToken)
         print(credential)
         Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
+            Utility.hideLoadingIndicator()
             if let error = error {
                 print(error)
                 return

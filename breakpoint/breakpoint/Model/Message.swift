@@ -11,6 +11,7 @@ import Foundation
 class Message {
     private var _content: String
     private var _senderId: String
+    private var _isMedia = false
     
     var content: String {
         return _content
@@ -20,8 +21,13 @@ class Message {
         return _senderId
     }
     
-    init(content: String, senderId: String) {
+    var isMedia: Bool {
+        return _isMedia
+    }
+    
+    init(content: String, senderId: String, isMedia: Bool) {
         self._content = content
         self._senderId = senderId
+        self._isMedia = isMedia
     }
 }

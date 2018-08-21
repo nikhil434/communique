@@ -33,6 +33,9 @@
 		71ED40641F279B5800731C19 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71ED40631F279B5800731C19 /* UserCell.swift */; };
 		A147A44BCCE63F12ED825F13 /* Pods_breakpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9E38C08E35A3D9610F585D /* Pods_breakpoint.framework */; };
 		E5382CC4212874E100BEBF0A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5382CC3212874E100BEBF0A /* GoogleService-Info.plist */; };
+		E5C004DF212C71FA00AA8C76 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C004DE212C71FA00AA8C76 /* LoadingIndicator.swift */; };
+		E5C004E2212C721A00AA8C76 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C004E1212C721900AA8C76 /* Utility.swift */; };
+		E5C004E5212C729600AA8C76 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C004E4212C729500AA8C76 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +69,9 @@
 		71ED40631F279B5800731C19 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		88E2AC6AE28DD3B4718024E7 /* Pods-breakpoint.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-breakpoint.release.xcconfig"; path = "Pods/Target Support Files/Pods-breakpoint/Pods-breakpoint.release.xcconfig"; sourceTree = "<group>"; };
 		E5382CC3212874E100BEBF0A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E5C004DE212C71FA00AA8C76 /* LoadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
+		E5C004E1212C721900AA8C76 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		E5C004E4212C729500AA8C76 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +120,8 @@
 				71B61A1B1F23CF0700FA8925 /* Model */,
 				71B61A1A1F23CEFE00FA8925 /* View */,
 				71B61A191F23CEEA00FA8925 /* Controller */,
+				E5C004E0212C721900AA8C76 /* Utility */,
+				E5C004E3212C729500AA8C76 /* Constants */,
 				71B61A051F23CEAA00FA8925 /* AppDelegate.swift */,
 				71B61A0B1F23CEAA00FA8925 /* Main.storyboard */,
 				71B61A0E1F23CEAA00FA8925 /* Assets.xcassets */,
@@ -142,6 +150,7 @@
 		71B61A1A1F23CEFE00FA8925 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E5C004DE212C71FA00AA8C76 /* LoadingIndicator.swift */,
 				71B61A261F26591800FA8925 /* InsetTextField.swift */,
 				71B61A281F265BB500FA8925 /* ShadowView.swift */,
 				71B61A321F26876100FA8925 /* FeedCell.swift */,
@@ -186,6 +195,22 @@
 				88E2AC6AE28DD3B4718024E7 /* Pods-breakpoint.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E5C004E0212C721900AA8C76 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				E5C004E1212C721900AA8C76 /* Utility.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		E5C004E3212C729500AA8C76 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				E5C004E4212C729500AA8C76 /* Constants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5C004DF212C71FA00AA8C76 /* LoadingIndicator.swift in Sources */,
 				71B61A311F26811600FA8925 /* UIViewExt.swift in Sources */,
 				71B61A331F26876100FA8925 /* FeedCell.swift in Sources */,
 				71B61A2D1F26701B00FA8925 /* MeVC.swift in Sources */,
@@ -339,12 +365,14 @@
 				7198DB891F27CCAD0088BE5A /* Group.swift in Sources */,
 				71ED40641F279B5800731C19 /* UserCell.swift in Sources */,
 				71B61A061F23CEAA00FA8925 /* AppDelegate.swift in Sources */,
+				E5C004E2212C721A00AA8C76 /* Utility.swift in Sources */,
 				71B61A291F265BB500FA8925 /* ShadowView.swift in Sources */,
 				71B61A2F1F2674AD00FA8925 /* CreatePostVC.swift in Sources */,
 				71B61A081F23CEAA00FA8925 /* FeedVC.swift in Sources */,
 				71B61A271F26591800FA8925 /* InsetTextField.swift in Sources */,
 				71B61A211F23DE8800FA8925 /* DataService.swift in Sources */,
 				71B61A351F26893000FA8925 /* Message.swift in Sources */,
+				E5C004E5212C729600AA8C76 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
