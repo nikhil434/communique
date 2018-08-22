@@ -102,11 +102,14 @@ class GroupFeedVC: UIViewController {
     }
     //MARK:- Helper Methods
     func showEmailPopUp() {
-        let composeVC = MFMailComposeViewController()
-        composeVC.mailComposeDelegate = self
-        let recipients = group?.members.filter { $0 != Auth.auth().currentUser?.email }
-        composeVC.setToRecipients(recipients)
-        present(composeVC, animated: true, completion: nil)
+        DataService.instance.getEmailsFor(group: group!) { (returnedEmails) in
+            let composeVC = MFMailComposeViewController()
+            composeVC.mailComposeDelegate = self
+            let recipients = returnedEmails.filter { $0 != Auth.auth().currentUser?.email }
+            composeVC.setToRecipients(recipients)
+            self.present(composeVC, animated: true, completion: nil)
+        }
+        
     }
     
     private func sendPhoto(_ image: UIImage) {
