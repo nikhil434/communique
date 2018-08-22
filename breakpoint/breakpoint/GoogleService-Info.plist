@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>1058617914449-s93go85mf8d9bl4hsgg3r5tm03udoodc.apps.googleusercontent.com</string>
+	<string>394340460058-shp9m3j5a3k4bkc3lv0tv6a7cejul4ra.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1058617914449-s93go85mf8d9bl4hsgg3r5tm03udoodc</string>
+	<string>com.googleusercontent.apps.394340460058-shp9m3j5a3k4bkc3lv0tv6a7cejul4ra</string>
 	<key>API_KEY</key>
-	<string>AIzaSyATtwk8CGTg-JtNWkeCG68ZIUE3eQU4ZgI</string>
+	<string>AIzaSyBcQhWdxZrGgoetSPOKhdbc3gbojMfiGu4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1058617914449</string>
+	<string>394340460058</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.stultzapps.breakpoint</string>
+	<string>com.nikhil.communique</string>
 	<key>PROJECT_ID</key>
-	<string>breakpoint-dev-7585c</string>
+	<string>communique-30bb7</string>
 	<key>STORAGE_BUCKET</key>
-	<string>breakpoint-dev-7585c.appspot.com</string>
+	<string>communique-30bb7.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1058617914449:ios:d63f1b2b017f06e2</string>
+	<string>1:394340460058:ios:e07a554cd8a68bdd</string>
 	<key>DATABASE_URL</key>
-	<string>https://breakpoint-dev-7585c.firebaseio.com</string>
+	<string>https://communique-30bb7.firebaseio.com</string>
 </dict>
 </plist>
